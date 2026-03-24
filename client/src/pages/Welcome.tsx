@@ -99,7 +99,7 @@ const Welcome = () => {
           RED TETRIS
           </h1>
           <p className="text-sm text-[var(--muted)]">
-            Retro arcade, portfolio polish. Choose mode, set your codename, and deploy.
+            Stack fast. Clear lines. Survive the drop.
           </p>
         </header>
 
