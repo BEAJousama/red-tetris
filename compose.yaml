@@ -1,0 +1,11 @@
+services:
+  app:
+    container_name: red-tetris
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data:/app/data
+    env_file:
+      - ./server/.env
+    restart: unless-stopped

@@ -1,0 +1,13 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+# After deploy, set CLIENT_ORIGIN in the Render dashboard to your Vercel URL (see docs/DEPLOY_RENDER_VERCEL.md).
+
+services:
+  - type: web
+    name: red-tetris-api
+    runtime: node
+    plan: free
+    region: oregon
+    rootDir: server
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start:prod
+    healthCheckPath: /api/leaderboard
