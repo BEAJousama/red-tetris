@@ -91,6 +91,7 @@ const GameResultOverlay = ({
           onClick={onRestart}
           disabled={!canRestartGame}
         />
+        <ActionButton winner={winner} label="BACK TO MENU" onClick={onLeave} />
         <ActionButton winner={winner} label="LEAVE" onClick={onLeave} />
         {!canRestartGame ? (
           <span className="mt-2 text-xs text-[var(--muted)]">

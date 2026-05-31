@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useBlocker, useLocation, useNavigate, useParams } from "react-router";
 import {
   Board,
+  ExitGameButton,
   GameModeBadge,
   GameOverOverlay,
   GameStatsDisplay,
@@ -53,6 +54,10 @@ const SoloGame = () => {
 
   const blocker = useBlocker(!gameOver);
 
+  const handleExitGame = () => {
+    navigate("/", { replace: true, state: null });
+  };
+
   useEffect(() => {
     if (!playerNameParam) {
       navigate("/", { replace: true });
@@ -86,6 +91,7 @@ const SoloGame = () => {
             <aside className="order-2 flex w-full max-w-[200px] flex-col gap-3 justify-self-center lg:order-1 lg:ml-auto lg:justify-self-end lg:pr-3">
               <GameModeBadge modifier={modifier} />
               <SoundToggle />
+              <ExitGameButton onClick={handleExitGame} />
               <NextPiecePanel piece={nextPiece} />
             </aside>
             <div className="order-1 flex justify-center lg:order-2">
@@ -103,7 +109,11 @@ const SoloGame = () => {
       )}
 
       {gameOver && (
-        <GameOverOverlay onRetry={requestRestartGame} level={level} />
+        <GameOverOverlay
+          onRetry={requestRestartGame}
+          onLeave={handleExitGame}
+          level={level}
+        />
       )}
       {blocker.state === "blocked" && <LeaveGameOverlay blocker={blocker} />}
     </section>

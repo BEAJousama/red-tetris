@@ -2,6 +2,7 @@ import { useEffect, useMemo } from "react";
 import { useBlocker, useLocation, useNavigate, useParams } from "react-router";
 import {
   Board,
+  ExitGameButton,
   GameModeBadge,
   GameResultOverlay,
   GameStatsDisplay,
@@ -69,6 +70,10 @@ export const MultiGame = () => {
     return !gameOver;
   });
 
+  const handleExitGame = () => {
+    navigate("/", { replace: true, state: null });
+  };
+
   useEffect(() => {
     if (!roomIdParam || !playerNameParam) {
       navigate("/", { replace: true });
@@ -103,6 +108,7 @@ export const MultiGame = () => {
             <aside className="order-2 flex w-full max-w-[200px] flex-col gap-3 justify-self-center lg:order-1 lg:ml-auto lg:justify-self-end lg:pr-3">
               <GameModeBadge modifier={modifier} />
               <SoundToggle />
+              <ExitGameButton onClick={handleExitGame} />
               <NextPiecePanel piece={nextPiece} />
             </aside>
 

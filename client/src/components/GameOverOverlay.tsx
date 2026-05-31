@@ -2,9 +2,11 @@ import { getLevelIcon, getMotivationMessage } from "../utils/levelUtils";
 
 const GameOverOverlay = ({
   onRetry,
+  onLeave,
   level = 1,
 }: {
   onRetry: () => void;
+  onLeave: () => void;
   level?: number;
 }) => {
   const {
@@ -38,6 +40,14 @@ const GameOverOverlay = ({
           className="retro-button retro-button-accent retro-focus pixel-text flex w-full items-center justify-center gap-3 py-3 text-sm font-black"
         >
           <span className="relative z-10">Restart Game</span>
+        </button>
+
+        <button
+          aria-label="Back to menu"
+          onClick={onLeave}
+          className="retro-button retro-focus pixel-text flex w-full items-center justify-center gap-3 py-3 text-sm font-black border-[var(--foreground)] bg-[var(--card)]"
+        >
+          <span className="relative z-10">Back to Menu</span>
         </button>
       </div>
     </div>
