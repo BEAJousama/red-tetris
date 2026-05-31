@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { playHardDrop, playMove, playRotate } from "../audio/gameAudio";
 import { EVENTS } from "../socket/events";
@@ -74,15 +74,62 @@ export const useMultiplayer = (
   const { isHost } = useAppSelector((state) => state.player);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const retryTimerRef = useRef<ReturnType<typeof window.setTimeout> | null>(null);
+  const retryAttemptRef = useRef(0);
+
+  const clearRetryTimer = useCallback(() => {
+    if (retryTimerRef.current !== null) {
+      window.clearTimeout(retryTimerRef.current);
+      retryTimerRef.current = null;
+    }
+  }, []);
+
+  const scheduleReconnect = useCallback(() => {
+    if (retryTimerRef.current !== null || socketMiddleware.isConnected()) {
+      return;
+    }
+
+    const delay = Math.min(1000 * 2 ** retryAttemptRef.current, 10000);
+    retryAttemptRef.current += 1;
+
+    retryTimerRef.current = window.setTimeout(() => {
+      retryTimerRef.current = null;
+      if (!socketMiddleware.isConnected()) {
+        socketMiddleware.connect();
+      }
+    }, delay);
+  }, []);
 
   useEffect(() => {
-    const handleConnect = () => setIsConnected(true);
+    const handleConnect = () => {
+      retryAttemptRef.current = 0;
+      clearRetryTimer();
+      setIsConnected(true);
+    };
+    const handleConnectError = () => {
+      setIsConnected(false);
+      scheduleReconnect();
+    };
+    const handleDisconnect = () => {
+      setIsConnected(false);
+      scheduleReconnect();
+    };
+
     socketMiddleware.onConnect(handleConnect);
+    socketMiddleware.onConnectError(handleConnectError);
+    socketMiddleware.onDisconnect(handleDisconnect);
+
+    if (!socketMiddleware.isConnected() && !retryTimerRef.current) {
+      socketMiddleware.connect();
+    }
 
     return () => {
       socketMiddleware.offConnect(handleConnect);
+      socketMiddleware.offConnectError(handleConnectError);
+      socketMiddleware.offDisconnect(handleDisconnect);
+      clearRetryTimer();
     };
-  }, []);
+  }, [clearRetryTimer, scheduleReconnect]);
 
   useEffect(() => {
     if (!isConnected || !roomId || !playerName) return;

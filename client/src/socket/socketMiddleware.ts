@@ -7,6 +7,14 @@ export const socketMiddleware = {
   disconnect: () => socket.disconnect(),
   onConnect: (handler: () => void) => socket.on("connect", handler),
   offConnect: (handler: () => void) => socket.off("connect", handler),
+  onConnectError: (handler: (error: Error) => void) =>
+    socket.on("connect_error", handler),
+  offConnectError: (handler: (error: Error) => void) =>
+    socket.off("connect_error", handler),
+  onDisconnect: (handler: (reason: string) => void) =>
+    socket.on("disconnect", handler),
+  offDisconnect: (handler: (reason: string) => void) =>
+    socket.off("disconnect", handler),
   isConnected: () => socket.connected,
   getId: () => socket.id,
 

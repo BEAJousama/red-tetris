@@ -8,6 +8,9 @@ services:
     plan: free
     region: oregon
     rootDir: server
+    envVars:
+      - key: NODE_VERSION
+        value: 20.19.0
     buildCommand: npm ci && npm run build
     startCommand: npm run start:prod
-    healthCheckPath: /api/leaderboard
+    healthCheckPath: /api/healthz

@@ -20,6 +20,15 @@ const io = new Server(server, {
   cors: { origin: CLIENT_ORIGIN, methods: ["GET", "POST"] },
 });
 
+app.get("/api/healthz", (_req: Request, res: Response) => {
+  res.json({
+    ok: true,
+    service: "red-tetris-api",
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+  });
+});
+
 app.get("/api/leaderboard", (req: Request, res: Response) => {
   // const limit = Math.min(100, Math.max(1, Number(req.query.limit) || 100));
   const entries = getLeaderboard();
