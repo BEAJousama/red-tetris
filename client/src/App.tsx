@@ -1,6 +1,8 @@
+import { useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import { Leaderboard, MultiGame, SoloGame, Welcome } from "./pages";
 import NotFound from "./pages/NotFound";
+import { BASE_URL } from "./utils/constants";
 
 const router = createBrowserRouter([
   { path: "/", element: <Welcome /> },
@@ -10,6 +12,15 @@ const router = createBrowserRouter([
   { path: "*", element: <NotFound /> },
 ]);
 
-const App = () => <RouterProvider router={router} />;
+const App = () => {
+  useEffect(() => {
+    // Wake up the backend server (useful for free tier hosting like Render)
+    fetch(`${BASE_URL}/api/healthz`).catch(() => {
+      // Ignore errors, the goal is just to wake up the server
+    });
+  }, []);
+
+  return <RouterProvider router={router} />;
+};
 
 export default App;
