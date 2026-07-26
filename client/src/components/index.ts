@@ -10,3 +10,4 @@ export { default as SoundToggle } from "./SoundToggle";
 export { default as LeaveGameOverlay } from "./LeaveGameOverlay";
 export { default as Spectrum } from "./Spectrum";
 export { default as WaitingOverlay } from "./WaitingOverlay";
+export { default as ServerStatus } from "./ServerStatus";
