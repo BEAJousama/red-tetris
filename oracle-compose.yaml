@@ -1,0 +1,19 @@
+services:
+  app:
+    container_name: red-tetris
+    build: .
+    network_mode: host
+    volumes:
+      - tetris_data:/app/data
+    env_file:
+      - ./server/.env
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "--quiet", "http://127.0.0.1:3000/api/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+volumes:
+  tetris_data:
