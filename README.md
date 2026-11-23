@@ -21,6 +21,20 @@ A real-time multiplayer Tetris game built with React, Node.js, and Socket.io.
 | Database | SQLite via `better-sqlite3` |
 | Containerisation | Docker / Docker Compose |
 
+## Tests
+
+**97 automated tests**, all passing:
+
+| Part | Runner | Tests | Coverage (statements) |
+|---|---|---|---|
+| Server (game engine, scoring, rooms, room manager, database) | Jest | 63 | 84 % |
+| Client (game helpers, level logic) | Vitest | 34 | 100 % of tested modules |
+
+```bash
+cd server && npm run coverage
+cd client && npm run coverage
+```
+
 ## Getting Started
 
 ### Prerequisites
